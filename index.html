@@ -351,6 +351,142 @@
       }
     }
 
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.2em;
+    margin-bottom: 0.4em;
+  }
+
+  header {
+    flex-direction: column;
+    gap: 0.6em;
+    padding-top: 2em;
+  }
+
+  .burger {
+    display: flex;
+  }
+
+  /* Smaller image on mobile */
+  #game-image {
+    max-width: 80vw;
+    max-height: 30vh;
+  }
+
+  .buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .buttons button {
+    width: 90%;
+    font-size: 1.1em;
+  }
+
+  .category {
+    font-size: 0.8em;
+    padding: 0.2em 0.5em;
+  }
+
+  /* Bigger side buttons */
+  .side-button {
+    font-size: 2.2em;
+    width: 52px;
+    height: 52px;
+  }
+
+  .left-button {
+    left: -1.4em;
+  }
+
+  .right-button {
+    right: -1.4em;
+  }
+
+  #score-modal .content,
+  #winner-modal .content,
+  #giveup-modal .content {
+    width: 90vw;
+    padding: 1em;
+  }
+}
+
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.2em;
+    margin-bottom: 0.4em;
+  }
+
+  header {
+    flex-direction: column;
+    gap: 0.6em;
+    padding-top: 2em;
+  }
+
+  .burger {
+    display: flex;
+  }
+
+  /* Smaller image on mobile */
+  #game-image {
+    max-width: 80vw;
+    max-height: 30vh;
+  }
+
+  .image-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    height: 30vh; /* Match max-height of image */
+    margin: 1em auto;
+  }
+
+  .buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .buttons button {
+    width: 90%;
+    font-size: 1.1em;
+  }
+
+  .category {
+    font-size: 0.8em;
+    padding: 0.2em 0.5em;
+  }
+
+  /* Full-height side buttons */
+  .side-button {
+    font-size: 2em;
+    width: 48px;
+    height: 100%; /* Make it as tall as image-container */
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .left-button {
+    left: -2.6em;
+  }
+
+  .right-button {
+    right: -2.6em;
+  }
+
+  #score-modal .content,
+  #winner-modal .content,
+  #giveup-modal .content {
+    width: 90vw;
+    padding: 1em;
+  }
+}
+
 
 
   </style>
