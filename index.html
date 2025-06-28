@@ -5,11 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" /> 
   <title>SNCC Retrospective</title>
   <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Image Game</title>
+
+
+
+ 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet" />
  <style>
     body {
@@ -297,6 +296,14 @@
       right: -1.5em;
     }
 
+
+
+
+  .image-container.hide-arrows .side-button {
+    display: none !important;
+  }
+
+
     @media (max-width: 600px) {
       h1 {
         font-size: 1.2em;
@@ -556,6 +563,10 @@
 
 
 </head>
+
+
+
+
 <body>
   <h1>SNCC Retrospective</h1>
   <header>
@@ -698,9 +709,7 @@
   const scoreText = document.getElementById('score-text');
   const scoreImage = document.getElementById('score-image');
 
-  scoreModal.addEventListener('click', () => {
-    scoreModal.style.display = 'none';
-  });
+
 
   function shakeTimer() {
     const timer = document.getElementById('timer');
@@ -834,6 +843,7 @@
       updateTimer();
     }, 1000);
     clearCategoryHighlights();
+    document.querySelector('.image-container').classList.add('hide-arrows');
   });
 
   stopBtn.addEventListener('click', () => {
@@ -865,7 +875,7 @@
     scoreModal.style.display = 'flex';
     
   
-    // Enable controls again
+  
     btnPic.disabled = false;
     btn1.disabled = false;
     btn2.disabled = false;
@@ -877,6 +887,8 @@
   
     updateTimer();
     updateImage();
+    document.querySelector('.image-container').classList.remove('hide-arrows');
+
   });
   
 
@@ -905,6 +917,8 @@
     startBtn.disabled = false;
     updateTimer();
     updateImage();
+    document.querySelector('.image-container').classList.remove('hide-arrows');
+
   });
 
   backBtn.addEventListener('click', () => {
