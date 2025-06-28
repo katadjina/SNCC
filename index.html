@@ -21,8 +21,12 @@
       user-select: none;
     }
 
-    header, main, footer {
-      padding: 1em;
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em;
+      padding-top: 1em;
     }
 
     h1 {
@@ -125,9 +129,9 @@
     }
 
     #player-name {
-          width: 180px;
+          width: 200px;
           min-width: 120px;
-          max-width: 180px;
+          max-width: 200px;
           height: 44px;
           padding: 0.6em 1em;
           font-size: 1.2em;
@@ -485,6 +489,62 @@
     width: 90vw;
     padding: 1em;
   }
+
+
+
+
+  .player-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+
+  #player-name {
+    width: 50vw;
+    font-size: 1em;
+    height: 40px;
+  }
+
+  #timer {
+    font-size: 1em;
+    padding: 0.4em 0.6em;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.8em;
+  flex-wrap: wrap;
+}
+
+  .action-buttons button {
+    width: 90%;
+    font-size: 1.1em;
+  }
+}
+}
+
+.player-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  margin-top: 1em;
+  flex-wrap: wrap;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.8em;
+  flex-wrap: wrap;
+  margin-top: 0.8em;
 }
 
 
@@ -499,12 +559,16 @@
 <body>
   <h1>SNCC Retrospective</h1>
   <header>
+  <div class="player-controls">
     <input type="text" id="player-name" placeholder="Enter your name" />
-    <button id="start-button">Start</button>
     <span id="timer">00:00</span>
+  </div>
+  <div class="action-buttons">
+    <button id="start-button">Start</button>
     <button id="stop-button">Stop</button>
     <button id="giveup-button">🏳️</button>
-  </header>
+  </div>
+</header>
   <main>
 
 
