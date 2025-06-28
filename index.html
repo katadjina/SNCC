@@ -957,20 +957,26 @@
     }
   });
 
-  winnerModal.addEventListener('click', () => {
-    winnerModal.style.display = 'none';
-  });
+  scoreModal.addEventListener('click', () => {
+  scoreModal.style.display = 'none';
+});
 
-  giveUpModal.addEventListener('click', () => {
+  winnerModal.addEventListener('click', (e) => {
+  if (!e.target.closest('.content')) {
+    winnerModal.style.display = 'none';
+  }
+});
+
+  giveUpModal.addEventListener('click', (e) => {
+  if (!e.target.closest('.content')) {
     giveUpModal.style.display = 'none';
-  });
+  }
+});
 
   resetForNextPlayer();
 })();
 
-scoreModal.addEventListener('click', () => {
-  scoreModal.style.display = 'none';
-});
+
 
 
 
