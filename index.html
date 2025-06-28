@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>SNCC Retrospective</title>
   <!DOCTYPE html>
 <html lang="en">
@@ -75,6 +75,7 @@
       transition: background-color 0.3s ease;
       min-width: 120px;
       max-width: 180px;
+      touch-action: manipulation;
     }
 
     .buttons button:disabled {
@@ -371,7 +372,7 @@
     display: flex;
   }
 
-  /* Smaller image on mobile */
+ 
   #game-image {
     max-width: 80vw;
     max-height: 30vh;
@@ -392,7 +393,7 @@
     padding: 0.2em 0.5em;
   }
 
-  /* Bigger side buttons */
+
   .side-button {
     font-size: 2.2em;
     width: 52px;
@@ -432,7 +433,7 @@
     display: flex;
   }
 
-  /* Smaller image on mobile */
+  
   #game-image {
     max-width: 80vw;
     max-height: 30vh;
@@ -444,7 +445,7 @@
     justify-content: center;
     align-items: center;
     width: fit-content;
-    height: 30vh; /* Match max-height of image */
+    height: 30vh; 
     margin: 1em auto;
   }
 
@@ -463,11 +464,11 @@
     padding: 0.2em 0.5em;
   }
 
-  /* Full-height side buttons */
+  
   .side-button {
     font-size: 2em;
     width: 48px;
-    height: 100%; /* Make it as tall as image-container */
+    height: 100%; 
     border-radius: 10px;
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
@@ -825,6 +826,7 @@
     btn3.disabled = true;
     btnPic.disabled = true;
     btnCategory.disabled = false;
+    startBtn.disabled = true;
     updateImage();
     updateTimer();
     clearInterval(timerInterval);
@@ -843,6 +845,7 @@
   
     gameStarted = false;
     gameFinished = true;
+    startBtn.disabled = false;
     playerNameInput.removeAttribute('readonly');
   
     leaderboard.push({ name, time: seconds });
@@ -893,6 +896,7 @@
     seconds = 0;
     gameStarted = false;
     gameFinished = true;
+    startBtn.disabled = false;
     playerNameInput.removeAttribute('readonly');
     btnPic.disabled = false;
     btn1.disabled = false;
