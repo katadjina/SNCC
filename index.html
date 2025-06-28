@@ -497,6 +497,15 @@
     right: -2.6em;
   }
 
+
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+
   #score-modal .content,
   #winner-modal .content,
   #giveup-modal .content {
@@ -555,6 +564,76 @@
   }
 }
 
+#start-button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+/*burger */
+
+.burger {
+  display: flex;
+  position: fixed;
+  top: 1em;
+  right: 1em;
+  z-index: 1001;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.burger div {
+  height: 4px;
+  background-color: #333;
+  border-radius: 2px;
+  transition: 0.3s ease;
+}
+
+#menu.hidden-menu {
+  display: none;
+}
+
+#menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 100vh;
+  background-color: white;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+  padding: 2em 1em;
+  z-index: 1000;
+}
+
+#menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#menu ul li {
+  margin-bottom: 1em;
+}
+
+#menu ul li button {
+  width: 100%;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  border: none;
+  border-radius: 6px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#menu ul li button:hover {
+  background-color: #0056b3;
+}
+
 
 
   </style>
@@ -591,6 +670,19 @@
 </div>
 <div id="photo-counter">Photo 1 / 9</div>
 
+<div class="burger" id="burger">
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+
+<nav id="menu" class="hidden-menu">
+  <ul>
+    <li><button onclick="resetForNextPlayer()">Single User mode </button></li>
+    <li><button onclick="scoreModal.style.display = 'flex'"> Whatever </button></li>
+    <li><button onclick="winnerModal.style.display = 'flex'">Whatever 2</button></li>
+  </ul>
+</nav>
 
 
 
@@ -709,8 +801,17 @@
   const scoreModal = document.getElementById('score-modal');
   const scoreText = document.getElementById('score-text');
   const scoreImage = document.getElementById('score-image');
+  const burger = document.getElementById('burger');
+  const menu = document.getElementById('menu');
 
 
+
+
+
+
+  burger.addEventListener('click', () => {
+    menu.classList.toggle('hidden-menu');
+  });
 
   function shakeTimer() {
     const timer = document.getElementById('timer');
@@ -791,28 +892,30 @@
   }
 
   function resetForNextPlayer() {
-    blurLevel = 3;
-    seconds = 0;
-    categoryUsed = false;
-    gameStarted = false;
-    gameFinished = false;
-    clearInterval(timerInterval);
-    playerNameInput.value = "";
-    playerNameInput.removeAttribute('readonly');
-    startBtn.disabled = false;
-    stopBtn.disabled = false;
-    giveUpBtn.disabled = false;
-    btn1.disabled = true;
-    btn2.disabled = true;
-    btn3.disabled = true;
-    btnPic.disabled = true;
-    btnCategory.disabled = true;
-    nextBtn.disabled = false;
-    backBtn.disabled = false;
-    clearCategoryHighlights();
-    updateTimer();
-    updateImage();
-  }
+  blurLevel = 3;
+  seconds = 0;
+  categoryUsed = false;
+  gameStarted = false;
+  gameFinished = false;
+  clearInterval(timerInterval);
+
+
+  playerNameInput.removeAttribute('readonly');  
+  startBtn.disabled = false;
+  stopBtn.disabled = false;
+  giveUpBtn.disabled = false;
+  btn1.disabled = true;
+  btn2.disabled = true;
+  btn3.disabled = true;
+  btnPic.disabled = true;
+  btnCategory.disabled = true;
+  nextBtn.disabled = false;
+  backBtn.disabled = false;
+  clearCategoryHighlights();
+  updateTimer();
+  updateImage();
+}
+
 
   function updateTimer() {
     const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
@@ -821,31 +924,32 @@
   }
 
   startBtn.addEventListener('click', () => {
-    const name = playerNameInput.value.trim();
-    if (!name) return alert("Enter player name first");
-    seconds = 0;
-    gameStarted = true;
-    gameFinished = false;
-    blurLevel = 3;
-    playerNameInput.setAttribute('readonly', 'true');
-    nextBtn.disabled = true;
-    backBtn.disabled = true;
-    btn1.disabled = false;
-    btn2.disabled = false;
-    btn3.disabled = true;
-    btnPic.disabled = true;
-    btnCategory.disabled = false;
-    startBtn.disabled = true;
-    updateImage();
+  const name = playerNameInput.value.trim();
+  if (!name) return alert("Enter player name first");
+  seconds = 0;
+  gameStarted = true;
+  gameFinished = false;
+  blurLevel = 3;
+  playerNameInput.setAttribute('readonly', 'true'); //lock da name for single mode
+  nextBtn.disabled = true;
+  backBtn.disabled = true;
+  btn1.disabled = false;
+  btn2.disabled = false;
+  btn3.disabled = true;
+  btnPic.disabled = true;
+  btnCategory.disabled = false;
+  startBtn.disabled = true;
+  updateImage();
+  updateTimer();
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    seconds++;
     updateTimer();
-    clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-      seconds++;
-      updateTimer();
-    }, 1000);
-    clearCategoryHighlights();
-    document.querySelector('.image-container').classList.add('hide-arrows');
-  });
+  }, 1000);
+  clearCategoryHighlights();
+  document.querySelector('.image-container').classList.add('hide-arrows');
+});
+
 
   stopBtn.addEventListener('click', () => {
     if (!gameStarted || gameFinished) return;
