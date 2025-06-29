@@ -733,29 +733,30 @@ button:disabled {
 
 (() => {
   const images = [
-    { name: "Demo", base: "image0", category: "Fictional character" },
-    { name: "Mona Lisa", base: "image1", category: "Art" },
-    { name: "Albert Einstein", base: "image2", category: "Famous figure" },
-    { name: "Taj Mahal", base: "image3", category: "Landmark" },
-    { name: "Pyramids", base: "image4", category: "Landmark" },
-    { name: "Harry Potter", base: "image5", category: "Fictional character" },
-    { name: "Shrek", base: "image6", category: "Fictional character" },
-    { name: "Rubik Cube", base: "image7", category: "Item" },
-    { name: "Moon Landing", base: "image8", category: "Event" },
-    { name: "Shrikant", base: "image9", category: "Famous figure" },
-    { name: "Game Boy", base: "image10", category: "Item" },
-    { name: "Panda", base: "image11", category: "Animal" },
-    { name: "Spongebob", base: "image12", category: "Fictional character" },
-    { name: "Hollywood", base: "image13", category: "Landmark" },
-    { name: "Donald Trump", base: "image14", category: "Famous figure" },
-    { name: "Penguin", base: "image15", category: "Animal" },
-    { name: "Titanic", base: "image16", category: "Movie" },
+    { name: "Pickle Rick", base: "image0", category: "Fictional character", comment: "Wow, we have a Rick and Morty fan here who nailed it in {time}"},
+    { name: "Mona Lisa", base: "image1", category: "Art" , comment: 'Mona Lisa. As enigmatic as you, {name} — and cracked the mystery in {time}.'},
+    { name: "Albert Einstein", base: "image2", category: "Famous figure" , comment: "Albert Einstein- the genius who changed physics forever, but you re good enoUGH too {name} with your {time} :D" },
+    { name: "Taj Mahal", base: "image3", category: "Landmark" , comment: "{name} identified this iconic building in {time} — high culture or high-speed luck?"},
+    //{ name: "Pyramids", base: "image4", category: "Landmark" , comment: "{name}, you uncovered the pyramids in {time} — faster than your last story moved to 'Complete'."},
+    { name: "Harry Potter", base: "image5", category: "Fictional character" ,comment: "Thanks {name}, 10 points to Gryffin-Now! — you nailed it in {time} "  },
+    { name: "Shrek", base: "image6", category: "Fictional character", comment: "{name}, not every SNCC member nails Shrek on the first try. You did it in {time}. You’re special." },
+    { name: "Rubik Cube", base: "image7", category: "Item" ,comment: "{name}, you're clearly used to chaos— no wonder you guessed it is Rubik’s Cube in {time}!"},
+    { name: "Moon Landing", base: "image8", category: "Event" , comment: "One small step for {name}, one giant leap for SNCC. Good guess landed in {time} "},
+    { name: "Shrikant", base: "image9", category: "Famous figure" , comment: "An icon needs no comments. {name}, you know that, right? Great timing, {}!" },
+    { name: "Game Boy", base: "image10", category: "Item" , comment: "{name}, Game Boy? That’s the last thing you debugged successfully, wasn’t it? :D You did it in {time}, keep crushing those bugs!"},
+    { name: "Panda", base: "image11", category: "Animal", comment: "{name}, spotted the panda! That’s the same energy you bring to daily stand-ups, we love it! (Your timing is not bad neither: {})"},
+    { name: "Spongebob", base: "image12", category: "Fictional character" ,comment: "{name},just scored {time}. Clearly you identify with SpongeBob: cute, bubbly, clumsy, and somehow got CSA."},
+    { name: "Hollywood", base: "image13", category: "Landmark" , comment: "{name}, shining like a star! (but stuck in LA traffic waiting for testers to approve your story. :D) Your timing is {time} "},
+    { name: "Donald Trump", base: "image14", category: "Famous figure" , comment: "Yep. That's him but let's change the subject which is that {name} just nailed it in {time}"},
+    { name: "Penguin", base: "image15", category: "Animal" ,comment: "YEAHH! Dressed to impress, {name} — waddling your way to victory, one awkward step at a time! Your speed? A chilly {time}."},
+    { name: "Titanic", base: "image16", category: "Movie", comment: "So you love Titanic {name}? We promise we won't tell anyone! Congratz on guessing in {}" },
     //{ name: "David", base: "image17", category: "Art" },
-    { name: "Sydeny Opera House", base: "image18", category: "Landmark" },
-    { name: "Matrix", base: "image19", category: "Movie" },
-    { name: "Pulp", base: "image20", category: "Movie" },
-    { name: "Pikachu", base: "image21", category: "Fictional character" },
-    { name: "Marylin Monroe", base: "image22", category: "Famous figure" },
+    { name: "Sydeny Opera House", base: "image18", category: "Landmark" , comment: "Sydeny Opera House- a beautiful architectural mess, just like {name}'s last catalog item. Great score BTW: {time}"},
+    { name: "Matrix", base: "image19", category: "Movie" , comment: "So now, {name}, red pill or blue pill? Choose wisely — you guessed it in {time}!"},
+    { name: "Pulp", base: "image20", category: "Movie" ,comment: "Looks like a Tarantino fan or a sharp guesser, {name} — either way, you got it in {time}!" },
+    { name: "Pikachu", base: "image21", category: "Fictional character" , comment: "{name}, you are just like Pikachu. You shocked us with your score: {}!"},
+    { name: "Marylin Monroe", base: "image22", category: "Famous figure" , comment: "{name}, looking glamorous and guessing like a legend! Nailed it in {time}, now where’s your red carpet?" },
+    { name: "Clockwork Orange", base: "image23", category: "Movie" , comment: "Disturbing movie, just like {name} who nailed it in {} <3"},
   ];
 
   const categories = [...new Set(images.map(img => img.category))];
@@ -806,7 +807,11 @@ button:disabled {
 
 
 
-
+function formatTime(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
 
 
   burger.addEventListener('click', () => {
@@ -951,51 +956,50 @@ button:disabled {
 });
 
 
-  stopBtn.addEventListener('click', () => {
-    if (!gameStarted || gameFinished) return;
-    clearInterval(timerInterval);
-    const name = playerNameInput.value.trim();
-    if (!name) return;
-  
-    gameStarted = false;
-    gameFinished = true;
-    startBtn.disabled = false;
-    playerNameInput.removeAttribute('readonly');
-  
-    leaderboard.push({ name, time: seconds });
-  
-    let imgSrc = 'images/aintmuch.gif';
-    let message = `${name}, not bad! You scored ${seconds} seconds.`;
-    
-    if (seconds <= 10) {
-      imgSrc = 'images/bigbrain.gif';
-      message = `${name}, you're a genius! Only ${seconds} seconds! 🧠`;
-    } else if (seconds <= 50) {
-      imgSrc = 'images/good.gif';
-      message = `Nice work, ${name}! You scored ${seconds} seconds. 👍`;
-    }
-    
-    scoreText.textContent = message;
-    scoreImage.src = imgSrc + '?v=' + new Date().getTime();  // force reload
-    scoreModal.style.display = 'flex';
-    
-  
-  
-    btnPic.disabled = false;
-    btn1.disabled = false;
-    btn2.disabled = false;
-    btn3.disabled = false;
-    btnCategory.disabled = true;
-    startBtn.disabled = false;
-    nextBtn.disabled = false;
-    backBtn.disabled = false;
-  
-    updateTimer();
-    updateImage();
-    document.querySelector('.image-container').classList.remove('hide-arrows');
+ stopBtn.addEventListener('click', () => {
+  if (!gameStarted || gameFinished) return;
+  clearInterval(timerInterval);
+  const name = playerNameInput.value.trim();
+  if (!name) return;
 
-  });
+  gameStarted = false;
+  gameFinished = true;
+  startBtn.disabled = false;
+  playerNameInput.removeAttribute('readonly');
+
+  leaderboard.push({ name, time: seconds });
+
+  const currentCommentTemplate = images[currentImageIndex].comment || '';
+  const formattedComment = currentCommentTemplate
+    .replace('{name}', name)
+    .replace('{time}', formatTime(seconds));
+
   
+  let imgSrc = 'images/aintmuch.gif';
+  if (seconds <= 10) {
+    imgSrc = 'images/bigbrain.gif';
+  } else if (seconds <= 50) {
+    imgSrc = 'images/good.gif';
+  }
+
+  scoreText.textContent = formattedComment;
+  scoreImage.src = imgSrc + '?v=' + new Date().getTime();  //reload
+  scoreModal.style.display = 'flex';
+
+  btnPic.disabled = false;
+  btn1.disabled = false;
+  btn2.disabled = false;
+  btn3.disabled = false;
+  btnCategory.disabled = true;
+  startBtn.disabled = false;
+  nextBtn.disabled = false;
+  backBtn.disabled = false;
+
+  updateTimer();
+  updateImage();
+  document.querySelector('.image-container').classList.remove('hide-arrows');
+});
+
 
   giveUpBtn.addEventListener('click', () => {
     if (!gameStarted || gameFinished) return;
