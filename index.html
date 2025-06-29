@@ -279,7 +279,8 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 2em;
+      font-size: 15px; 
+      touch-action: manipulation;
       background-color: rgba(0, 0, 0, 0.4);
       color: white;
       border: none;
@@ -1091,8 +1092,21 @@ function formatTime(seconds) {
   resetForNextPlayer();
 })();
 
+//for preventing accidental zoom in or pinching on mobile
+document.addEventListener('touchstart', function (event) {
+    if (event.touches.length > 1) {
+      event.preventDefault(); 
+    }
+  }, { passive: false });
 
-
+  let lastTouchEnd = 0;
+  document.addEventListener('touchend', function (event) {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) {
+      event.preventDefault(); 
+    }
+    lastTouchEnd = now;
+  }, false);
 
 
 </script>
