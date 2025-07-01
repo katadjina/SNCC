@@ -714,3 +714,945 @@ scoreModal.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" /> 
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+  <title>SNCC Retrospective</title>
+  <!DOCTYPE html>
+
+
+
+ 
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet" />
+ <style>
+    body {
+      font-family: 'Poppins', Arial, sans-serif;
+      text-align: center;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em;
+      padding-top: 1em;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      background: linear-gradient(90deg, #ff4e50, #f9d423, #1cd8d2, #93edc7, #ff4e50);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine 6s linear infinite;
+      margin: 0.2em auto;
+    }
+
+    button {
+      touch-action: manipulation;
+    }
+
+    #game-image {
+      max-width: 90vw;
+      max-height: 60vh;
+      border: 2px solid #ccc;
+      margin: 1em auto 0.3em;
+      display: block;
+      border-radius: 8px;
+      background: white;
+    }
+
+    #photo-counter {
+      font-weight: 600;
+      font-size: 1.1em;
+      color: #333;
+      margin-bottom: 0.8em;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6em;
+    }
+
+    .buttons button {
+      margin: 0.3em;
+      padding: 0.6em 1em;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      transition: background-color 0.3s ease;
+      min-width: 120px;
+      max-width: 180px;
+      touch-action: manipulation;
+    }
+
+    .buttons button:disabled {
+      background-color: #999;
+      cursor: not-allowed;
+    }
+
+    .buttons button.active {
+      background-color: #28a745 !important;
+      font-weight: bold;
+      box-shadow: 0 0 10px #28a745;
+    }
+
+    .category {
+      display: inline-block;
+      margin: 0.3em;
+      padding: 0.3em 0.6em;
+      border: 1.5px solid #333;
+      border-radius: 4px;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 600;
+      font-size: 0.9em;
+      background-color: white;
+      transition: 0.3s ease;
+    }
+
+    .category.crossed {
+      text-decoration: line-through;
+      opacity: 0.5;
+    }
+
+    .category.highlighted {
+      background-color: #ffeb3b;
+      border-color: #fbc02d;
+      color: #333;
+      font-weight: 700;
+      box-shadow: 0 0 12px #fbc02d;
+    }
+
+    #top-users {
+      display: none;
+      margin-top: 1em;
+      font-size: 1.1em;
+      font-weight: 600;
+      color: #333;
+    }
+
+    #player-name[readonly] {
+      background-color: #eee;
+      color: #666;
+    }
+
+    #player-name {
+          width: 200px;
+          min-width: 120px;
+          max-width: 200px;
+          height: 44px;
+          padding: 0.6em 1em;
+          font-size: 1.2em;
+          font-weight: 600;
+          border: none;
+          border-radius: 6px;
+          box-sizing: border-box;
+          margin: 0.3em;
+          background-color: white;
+          color: #333;
+          text-align: center;
+          box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      }
+
+    #timer {
+      font-size: 1.4em;
+      font-weight: 700;
+      color: #222;
+      padding: 0.3em 0.8em;
+      border-radius: 6px;
+      background-color: #fff;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    #timer.shake-flash {
+      animation: shake 0.4s ease, flash-red 0.6s ease;
+    }
+
+    #start-button, #stop-button, #giveup-button {
+      background-color: #007bff;
+      color: white;
+      font-size: 1em;
+      font-weight: 600;
+      border: none;
+      padding: 0.5em 1.2em;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+    }
+
+    #stop-button {
+      background-color: #dc3545;
+    }
+
+    #stop-button:hover {
+      background-color: #a71d2a;
+    }
+
+    #giveup-button {
+      background-color: #ffc107;
+      color: #333;
+    }
+
+    #giveup-button:hover {
+      background-color: #e0a800;
+    }
+
+    #score-modal, #winner-modal, #giveup-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    #score-modal .content,
+    #winner-modal .content,
+    #giveup-modal .content {
+      background: white;
+      padding: 2em;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 90%;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    #winner-modal img,
+    #giveup-modal img {
+      width: 100%;
+      max-width: 240px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .burger {
+      display: none;
+      position: absolute;
+      top: 1em;
+      right: 1em;
+      z-index: 999;
+      width: 30px;
+      height: 24px;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .burger div {
+      height: 4px;
+      background-color: #333;
+      border-radius: 2px;
+      transition: 0.3s ease;
+    }
+
+    @keyframes flash-red {
+      0% { background-color: #fff; box-shadow: none; color: #222; }
+      50% { background-color: #ffe5e5; box-shadow: 0 0 12px 6px red; color: #b30000; }
+      100% { background-color: #fff; box-shadow: none; color: #222; }
+    }
+
+    @keyframes shine {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+
+    .image-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 1em auto;
+      width: fit-content;
+    }
+
+    .side-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px; 
+      touch-action: manipulation;
+      background-color: rgba(0, 0, 0, 0.4);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      z-index: 10;
+      transition: background-color 0.3s ease;
+    }
+
+    .side-button:hover {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .left-button {
+      left: -1.5em;
+    }
+
+    .right-button {
+      right: -1.5em;
+    }
+
+
+
+/*when mobile hide the arrows*/
+  .image-container.hide-arrows .side-button {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.2em;
+        margin-bottom: 0.4em;
+      }
+
+
+
+      .left-button {
+        left: -1em;
+      }
+
+      .right-button {
+        right: -1em;
+      }
+
+      #score-modal .content,
+      #winner-modal .content,
+      #giveup-modal .content {
+         background: white;
+          padding: 1.5em;
+          border-radius: 12px;
+          text-align: center;
+          width: 90vw;
+          max-width: 350px;
+          box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      }
+    }
+
+
+
+  .buttons button {
+    width: 90%;
+    font-size: 1.1em;
+  }
+
+  .category {
+    font-size: 0.8em;
+    padding: 0.2em 0.5em;
+  }
+
+
+  .side-button {
+    font-size: 2.2em;
+    width: 52px;
+    height: 52px;
+  }
+
+  .left-button {
+    left: -1.4em;
+  }
+
+  .right-button {
+    right: -1.4em;
+  }
+
+  #score-modal .content,
+  #winner-modal .content,
+  #giveup-modal .content {
+    width: 90vw;
+    padding: 1em;
+  }
+}
+
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.2em;
+    margin-bottom: 0.4em;
+  }
+
+  header {
+    flex-direction: column;
+    gap: 0.6em;
+    padding-top: 2em;
+  }
+
+  .burger {
+    display: flex;
+  }
+
+  
+
+
+
+  #score-modal .content,
+  #winner-modal .content,
+  #giveup-modal .content {
+    width: 90vw;
+    max-width: 350px;
+    padding: 1.5em;
+    border-radius: 12px;
+    text-align: center;
+    background: white;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  }
+
+  #score-modal img,
+  #winner-modal img,
+  #giveup-modal img {
+    width: 100%;
+    max-width: 240px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  
+
+
+/*burger */
+
+.burger {
+  display: flex;
+  position: fixed;
+  top: 1em;
+  right: 1em;
+  z-index: 1001;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.burger div {
+  height: 4px;
+  background-color: #333;
+  border-radius: 2px;
+  transition: 0.3s ease;
+}
+
+#menu.hidden-menu {
+  display: none;
+}
+
+#menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 100vh;
+  background-color: white;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+  padding: 2em 1em;
+  z-index: 1000;
+}
+
+#menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#menu ul li {
+  margin-bottom: 1em;
+}
+
+#menu ul li button {
+  width: 100%;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  border: none;
+  border-radius: 6px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#menu ul li button:hover {
+  background-color: #0056b3;
+}
+
+
+
+  </style>
+
+
+
+
+
+</head>
+
+
+
+
+<body>
+  <h1>SNCC Retrospective</h1>
+  <header>
+  <div class="player-controls">
+    <input type="text" id="player-name" placeholder="Enter your name" />
+    <span id="timer">00:00</span>
+  </div>
+  <div class="action-buttons">
+    <button id="start-button">Start</button>
+    <button id="stop-button">Stop</button>
+    <button id="giveup-button">🏳️</button>
+  </div>
+</header>
+  <main>
+
+
+<div class="image-container">
+  <button id="back-button" class="side-button left-button">⟨</button>
+  <img id="game-image" src="images/logo.jpg" alt="Game Logo" />
+  <button id="next-button" class="side-button right-button">⟩</button>
+</div>
+<div id="photo-counter">Photo 1 / 9</div>
+
+<div class="burger" id="burger">
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+
+<nav id="menu" class="hidden-menu">
+  <ul>
+    <li><button onclick="resetForNextPlayer()">Single User mode </button></li>
+    <li><button onclick="scoreModal.style.display = 'flex'"> Whatever </button></li>
+    <li><button onclick="winnerModal.style.display = 'flex'">Whatever 2</button></li>
+  </ul>
+</nav>
+
+
+
+    <div class="buttons">
+      
+      <button id="button1" disabled>1</button>
+      <button id="button2" disabled>2 (+10s)</button>
+      <button id="button3" disabled>3 (+15s)</button>
+      <button id="picButton" disabled>Pic</button>
+      <button id="categoryButton" disabled>Category (+15s)</button>
+      
+    </div>
+    <div id="categories"></div>
+    <button id="end-button">END</button>
+    <div id="top-users"></div>
+  </main>
+  <div id="winner-modal">
+    <div class="content">
+      <h2 id="winner-text">You won!</h2>
+      <img src="images/dance.gif" alt="danceeeee" />
+    </div>
+  </div>
+
+
+  <div id="giveup-modal">
+    <div class="content">
+      <h2 id="giveup-text">We had trust in you, [name]</h2>
+      <img src="images/obama.gif" alt="obama he he" />
+    </div>
+  </div>
+
+  <div id="score-modal">
+    <div class="content">
+      <h2 id="score-text">Score Info</h2>
+      <img id="score-image" src="" alt="score image" />
+    </div>
+  </div>
+
+
+
+
+
+
+<script>
+
+    
+
+
+(() => {
+  const images = [
+    { name: "Pickle Rick", base: "image0", category: "Fictional character", comment: "Wow, we have a Rick and Morty fan here who nailed it in {time}"},
+    { name: "Mona Lisa", base: "image1", category: "Art" , comment: 'Mona Lisa. As enigmatic as you, {name}. You cracked the mystery in {time}.'},
+   
+  ];
+
+  const categories = [...new Set(images.map(img => img.category))];
+  const categoryBox = document.getElementById('categories');
+
+  categories.forEach(cat => {
+    const div = document.createElement('div');
+    div.className = 'category';
+    div.textContent = cat;
+    div.onclick = () => div.classList.toggle('crossed');
+    categoryBox.appendChild(div);
+  });
+
+  let currentImageIndex = 0;
+  let blurLevel = 3;
+  let seconds = 0;
+  let timerInterval = null;
+  let gameStarted = false;
+  let gameFinished = false;
+  let categoryUsed = false;
+  const leaderboard = [];
+
+  const imgElem = document.getElementById('game-image');
+  const photoCounter = document.getElementById('photo-counter');
+  const btn1 = document.getElementById('button1');
+  const btn2 = document.getElementById('button2');
+  const btn3 = document.getElementById('button3');
+  const btnPic = document.getElementById('picButton');
+  const btnCategory = document.getElementById('categoryButton');
+  const startBtn = document.getElementById('start-button');
+  const stopBtn = document.getElementById('stop-button');
+  const giveUpBtn = document.getElementById('giveup-button');
+  const backBtn = document.getElementById('back-button');
+  const nextBtn = document.getElementById('next-button');
+  const playerNameInput = document.getElementById('player-name');
+  const timerDisplay = document.getElementById('timer');
+  const endBtn = document.getElementById('end-button');
+  const topUsersBox = document.getElementById('top-users');
+  const winnerModal = document.getElementById('winner-modal');
+  const winnerText = document.getElementById('winner-text');
+  const giveUpModal = document.getElementById('giveup-modal');
+  const giveUpText = document.getElementById('giveup-text');
+  const scoreModal = document.getElementById('score-modal');
+  const scoreText = document.getElementById('score-text');
+  const scoreImage = document.getElementById('score-image');
+  const burger = document.getElementById('burger');
+  const menu = document.getElementById('menu');
+
+
+
+function formatTime(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+
+  burger.addEventListener('click', () => {
+    menu.classList.toggle('hidden-menu');
+  });
+
+  function shakeTimer() {
+    const timer = document.getElementById('timer');
+    timer.classList.add('shake-flash');
+    setTimeout(() => {
+    timer.classList.remove('shake-flash');
+        }, 600);
+  }
+  
+
+
+  function updatePhotoCounter() {
+    photoCounter.textContent = `Photo ${currentImageIndex + 1} / ${images.length}`;
+  }
+
+  function clearCategoryHighlights() {
+    [...categoryBox.children].forEach(catDiv => catDiv.classList.remove('highlighted'));
+  }
+
+  function highlightCategory(cat) {
+    clearCategoryHighlights();
+    [...categoryBox.children].forEach(catDiv => {
+      if (catDiv.textContent === cat) catDiv.classList.add('highlighted');
+    });
+  }
+
+  function updateImage() {
+    if (!gameStarted && !gameFinished && blurLevel === 3) {
+      imgElem.src = 'images/logo.jpg';
+      highlightActiveButton(null);
+      updatePhotoCounter();
+      clearCategoryHighlights();
+      return;
+    }
+    imgElem.src = `images/${images[currentImageIndex].base}_${blurLevel === 0 ? 'clear' : 'blur' + blurLevel}.jpg`;
+    highlightActiveButton(blurLevel);
+    updatePhotoCounter();
+  }
+
+  function highlightActiveButton(level) {
+    [btn1, btn2, btn3, btnPic].forEach(b => b.classList.remove('active'));
+    if (level === 3) btn1.classList.add('active');
+    else if (level === 2) btn2.classList.add('active');
+    else if (level === 1) btn3.classList.add('active');
+    else if (level === 0) btnPic.classList.add('active');
+  }
+
+  function revealBlur(level) {
+    if (!gameStarted && !gameFinished) return;
+  
+    if (gameStarted) {
+      if (level === 2) {
+        seconds += 10;
+        shakeTimer();
+        updateTimer();
+      }
+      if (level === 1) {
+        seconds += 15;
+        shakeTimer();
+        updateTimer();
+      }
+    }
+  
+    blurLevel = level;
+    updateImage();
+  
+    if (gameStarted) {
+      if (level === 3) btn2.disabled = false;
+      else if (level === 2) btn3.disabled = false;
+    }
+  }
+  
+
+  function revealClearImage() {
+    if (!gameFinished) return;
+    blurLevel = 0;
+    updateImage();
+  }
+
+  function resetForNextPlayer() {
+  blurLevel = 3;
+  seconds = 0;
+  categoryUsed = false;
+  gameStarted = false;
+  gameFinished = false;
+  clearInterval(timerInterval);
+
+
+  playerNameInput.removeAttribute('readonly');  
+  startBtn.disabled = false;
+  stopBtn.disabled = false;
+  giveUpBtn.disabled = false;
+  btn1.disabled = true;
+  btn2.disabled = true;
+  btn3.disabled = true;
+  btnPic.disabled = true;
+  btnCategory.disabled = true;
+  nextBtn.disabled = false;
+  backBtn.disabled = false;
+  clearCategoryHighlights();
+  updateTimer();
+  updateImage();
+}
+
+
+  function updateTimer() {
+    const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const secs = String(seconds % 60).padStart(2, '0');
+    timerDisplay.textContent = `${mins}:${secs}`;
+  }
+
+  startBtn.addEventListener('click', () => {
+  const name = playerNameInput.value.trim();
+  if (!name) return alert("Enter player name first");
+  seconds = 0;
+  gameStarted = true;
+  gameFinished = false;
+  blurLevel = 3;
+  playerNameInput.setAttribute('readonly', 'true'); //lock da name for single mode
+  nextBtn.disabled = true;
+  backBtn.disabled = true;
+  btn1.disabled = false;
+  btn2.disabled = false;
+  btn3.disabled = true;
+  btnPic.disabled = true;
+  btnCategory.disabled = false;
+  startBtn.disabled = true;
+  updateImage();
+  updateTimer();
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    seconds++;
+    updateTimer();
+  }, 1000);
+  clearCategoryHighlights();
+  document.querySelector('.image-container').classList.add('hide-arrows');
+});
+
+
+ stopBtn.addEventListener('click', () => {
+  if (!gameStarted || gameFinished) return;
+  clearInterval(timerInterval);
+  const name = playerNameInput.value.trim();
+  if (!name) return;
+
+  gameStarted = false;
+  gameFinished = true;
+  startBtn.disabled = false;
+  playerNameInput.removeAttribute('readonly');
+
+  leaderboard.push({ name, time: seconds });
+
+  const currentCommentTemplate = images[currentImageIndex].comment || '';
+  const formattedComment = currentCommentTemplate
+    .replace('{name}', name)
+    .replace('{time}', formatTime(seconds));
+
+  
+  let imgSrc = 'images/aintmuch.gif';
+  if (seconds <= 10) {
+    imgSrc = 'images/bigbrain.gif';
+  } else if (seconds <= 50) {
+    imgSrc = 'images/good.gif';
+  }
+
+  scoreText.textContent = formattedComment;
+  scoreImage.src = imgSrc + '?v=' + new Date().getTime();  //reload
+  scoreModal.style.display = 'flex';
+
+  btnPic.disabled = false;
+  btn1.disabled = false;
+  btn2.disabled = false;
+  btn3.disabled = false;
+  btnCategory.disabled = true;
+  startBtn.disabled = false;
+  nextBtn.disabled = false;
+  backBtn.disabled = false;
+
+  updateTimer();
+  updateImage();
+  document.querySelector('.image-container').classList.remove('hide-arrows');
+});
+
+
+  giveUpBtn.addEventListener('click', () => {
+    if (!gameStarted || gameFinished) return;
+    clearInterval(timerInterval);
+    const name = playerNameInput.value.trim();
+    if (!name) return;
+    leaderboard.push({ name, time: 666 });
+    //alert(`${name} gave up! Score: 666 seconds`);
+    giveUpText.textContent = `We had trust in you, ${name}...`;
+    giveUpModal.style.display = 'flex';
+    gameStarted = false;
+    gameFinished = true;
+    resetForNextPlayer();
+    seconds = 0;
+    gameStarted = false;
+    gameFinished = true;
+    startBtn.disabled = false;
+    playerNameInput.removeAttribute('readonly');
+    btnPic.disabled = false;
+    btn1.disabled = false;
+    btn2.disabled = false;
+    btn3.disabled = false;
+    btnCategory.disabled = true;
+    startBtn.disabled = false;
+    updateTimer();
+    updateImage();
+    document.querySelector('.image-container').classList.remove('hide-arrows');
+
+  });
+
+  backBtn.addEventListener('click', () => {
+    currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+    resetForNextPlayer();
+  });
+
+  nextBtn.addEventListener('click', () => {
+    currentImageIndex = (currentImageIndex + 1) % images.length;
+    resetForNextPlayer();
+  });
+
+  btn1.addEventListener('click', () => revealBlur(3));
+  btn2.addEventListener('click', () => revealBlur(2));
+  btn3.addEventListener('click', () => revealBlur(1));
+  btnPic.addEventListener('click', () => revealClearImage());
+
+  btnCategory.addEventListener('click', () => {
+    if ((!gameStarted && !gameFinished) || categoryUsed) return;
+    seconds += 15;
+    shakeTimer();
+    updateTimer();
+    highlightCategory(images[currentImageIndex].category);
+    categoryUsed = true;
+    btnCategory.disabled = true;
+  });
+
+
+  endBtn.addEventListener('click', () => {
+    leaderboard.sort((a, b) => a.time - b.time);
+    const top = leaderboard[0];
+    if (top) {
+      winnerText.textContent = `${top.name}, you won with a score: ${top.time}s!`;
+      winnerModal.style.display = 'flex';
+    }
+  });
+
+  scoreModal.addEventListener('click', () => {
+  scoreModal.style.display = 'none';
+});
+
+  winnerModal.addEventListener('click', (e) => {
+  if (!e.target.closest('.content')) {
+    winnerModal.style.display = 'none';
+  }
+});
+
+  giveUpModal.addEventListener('click', (e) => {
+  if (!e.target.closest('.content')) {
+    giveUpModal.style.display = 'none';
+  }
+});
+
+  resetForNextPlayer();
+})();
+
+//for preventing accidental zoom in or pinching on mobile
+document.addEventListener('touchstart', function (event) {
+    if (event.touches.length > 1) {
+      event.preventDefault(); 
+    }
+  }, { passive: false });
+
+  let lastTouchEnd = 0;
+  document.addEventListener('touchend', function (event) {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) {
+      event.preventDefault(); 
+    }
+    lastTouchEnd = now;
+  }, false);
+
+
+</script>
+</body>
+</html>

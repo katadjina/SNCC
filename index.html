@@ -644,6 +644,62 @@ button:disabled {
 
 
 
+/*JD modal*/
+
+
+#credit-modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,0.9);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  overflow: hidden;
+}
+
+#credit-image {
+  width: 200px;
+  transition: transform 2s linear;
+  animation: grow infinite linear 5s;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(255,255,255,0.6);
+}
+
+@keyframes grow {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(10);
+  }
+}
+
+
+
+/* sppiny JD */
+@keyframes grow {
+  0% { transform: scale(1) rotate(0deg); }
+  100% { transform: scale(10) rotate(0deg); } /* Grow only */
+}
+
+
+@keyframes spinAccelerate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#credit-image {
+  width: 200px;
+  transition: transform 2s linear;
+  animation: grow 5s linear forwards; /* grow first */
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(255,255,255,0.6);
+  will-change: transform;
+}
+
+
+
   </style>
 
 
@@ -652,7 +708,9 @@ button:disabled {
 
 </head>
 
-
+<div id="credit-modal">
+  <img id="credit-image" src="images/photojd.jpg" alt="credit" />
+</div>
 
 
 <body>
@@ -689,6 +747,7 @@ button:disabled {
     <li><button onclick="resetForNextPlayer()">Single User mode </button></li>
     <li><button onclick="scoreModal.style.display = 'flex'"> Whatever </button></li>
     <li><button onclick="winnerModal.style.display = 'flex'">Whatever 2</button></li>
+    <li><button onclick="showCredit()">Credits</button></li>
   </ul>
 </nav>
 
@@ -727,6 +786,10 @@ button:disabled {
       <h2 id="score-text">Score Info</h2>
       <img id="score-image" src="" alt="score image" />
     </div>
+  </div>
+
+  <div id="credit-modal">
+    <img id="credit-image" src="images/photojd.jpg" alt="credit" />
   </div>
 
 
@@ -1107,6 +1170,76 @@ document.addEventListener('touchstart', function (event) {
     }
     lastTouchEnd = now;
   }, false);
+
+
+
+const creditModal = document.getElementById('credit-modal');
+const creditImage = document.getElementById('credit-image');
+
+
+function showCredit() {
+  creditModal.style.display = 'flex';
+
+  //Reset animations
+  creditImage.style.animation = 'none';
+  void creditImage.offsetWidth;
+
+  //Start grow anima
+  creditImage.style.animation = 'grow 5s linear forwards';
+
+  
+  setTimeout(() => {
+    let speed = 5; //start rotate
+    let rotateCount = 0;
+
+    function accelerateSpin() {
+      rotateCount++;
+      speed = Math.max(0.3, speed - 0.3); //get faster 
+      creditImage.style.animation = `spinAccelerate ${speed}s linear infinite`;
+    }
+
+    accelerateSpin();
+
+    const spinInterval = setInterval(() => {
+      if (speed <= 0.3) {
+        clearInterval(spinInterval);
+      } else {
+        accelerateSpin();
+      }
+    }, 1000); //every sec + vite
+
+  }, 3000); 
+}
+
+//close credi modal
+creditModal.addEventListener('click', () => {
+  creditModal.style.display = 'none';
+  creditImage.style.animation = 'none'; 
+});
+
+
+
+
+
+
+function showCredit() {
+  creditModal.style.display = 'flex';
+}
+
+
+creditModal.addEventListener('click', () => {
+  creditModal.style.display = 'none';
+  creditImage.style.transform = 'scale(1)'; //reset
+});
+
+function showCredit() {
+  creditModal.style.display = 'flex';
+  creditImage.style.animation = 'none';
+  void creditImage.offsetWidth; //restart animationn
+  creditImage.style.animation = 'grow infinite linear 5s';
+}
+
+
 
 
 </script>
